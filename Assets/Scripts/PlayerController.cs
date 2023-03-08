@@ -48,7 +48,7 @@ public class PlayerController : MonoBehaviour
                 Vector3 lookRight = new Vector3(cameraArm.right.x, 0.0f, cameraArm.right.z).normalized;
                 moveDir = (lookDir * moveInput.y) + (lookRight * moveInput.x);
 
-                playerBody.forward = lookDir;
+                playerBody.forward = moveDir;
             }
 
             transform.position += moveDir * Time.deltaTime * playerSpeed;
