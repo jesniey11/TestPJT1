@@ -9,8 +9,11 @@ public class PlayerController : MonoBehaviour
     private Rigidbody rigid;
     private Vector3 moveDir;
 
+    [SerializeField]
     private Transform cameraArm;
+    [SerializeField]
     private Transform playerBody;
+    [SerializeField]
     private GameObject player;
 
     public float cameraSpeed = 2.0f;
@@ -19,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     // 마우스 움직임에 따른 화면 회전
     private void CameraRotate() {
+
         Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X") * cameraSpeed, Input.GetAxis("Mouse Y") * cameraSpeed);
         Vector3 cameraAngle = cameraArm.rotation.eulerAngles; // 카메라의 rotation 값을 오일러 각으로 바꿈
 
@@ -40,11 +44,11 @@ public class PlayerController : MonoBehaviour
             animator.SetBool("isMove", isMove);
 
             if (isMove && !PlayerMain.isJump) {
-                Vector3 lookDir = new Vector3(cameraArm.forward.x, 0.0f, cameraArm.forward.z);
+                Vector3 lookDir = new Vector3(cameraArm.forward.x, 0.0f, cameraArm.forward.z).normalized;
                 Vector3 lookRight = new Vector3(cameraArm.right.x, 0.0f, cameraArm.right.z).normalized;
                 moveDir = (lookDir * moveInput.y) + (lookRight * moveInput.x);
 
-                playerBody.forward = moveDir;
+                playerBody.forward = lookDir;
             }
 
             transform.position += moveDir * Time.deltaTime * playerSpeed;
