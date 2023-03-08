@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
 
         float x = cameraAngle.x - mouseDelta.y;
 
-        // 카메라 각도 위쪽 70도, 아래쪽 25도 제한
+        // 카메라 각도 위쪽 70도, 아래쪽 25도 제한 - 위쪽 각도 제한 더 필요할듯?
         if (x < 180f) { x = Mathf.Clamp(x, -1.0f, 70.0f); }
         else { x = Mathf.Clamp(x, 335f, 361f); }
 

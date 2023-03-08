@@ -16,6 +16,11 @@ public class PlayerMain : MonoBehaviour
     //    hpMaxNow = hpMax;
     //}
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Ground")) { isJump = false; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
