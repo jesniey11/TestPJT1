@@ -21,6 +21,11 @@ public class PlayerMain : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground")) { isJump = false; }
     }
 
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.gameObject.CompareTag("DeadSpace")) { isDead = true; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

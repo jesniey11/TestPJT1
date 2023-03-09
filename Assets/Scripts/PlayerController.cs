@@ -69,17 +69,19 @@ public class PlayerController : MonoBehaviour
     //GameManager로 분리예정
     private void Dead() {
         player.SetActive(false);
-		PlayerMain.isDead = true;
+        PlayerMain.isDead = true;
 
         // 5초뒤 부활 - 버튼 눌러야 부활하게 바꿀까?
-        Invoke("Respawn", 5);
+        Invoke("Respawn", 3);
     }
 
     private void Respawn() {
-		PlayerMain.isDead = false;
+        transform.position = new Vector3(0, 1, 0);
+        player.SetActive(true);
+        PlayerMain.isDead = false;
+
         //플레이어 진행도에 따라 랜덤 리스폰 장소(하드코딩X)로 이동
         //임시로 0 0 0으로 이동하게 해둠
-        transform.position = new Vector3(0, 0, 0);
 
         //무적?
     }
