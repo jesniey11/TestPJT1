@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -35,6 +36,11 @@ public class PlayerController : MonoBehaviour
         cameraArm.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
     }
 
+    private void CameraMove() {
+        Vector3 cameraPos = playerBody.position;
+        cameraArm.position = cameraPos;
+    }
+
     // WASD 이동 (카메라가 보는 방향 기준)
     private void Move()
     {
@@ -66,7 +72,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    //GameManager로 분리예정
     private void Dead() {
         player.SetActive(false);
         PlayerMain.isDead = true;
@@ -76,12 +81,14 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Respawn() {
-        transform.position = new Vector3(0, 1, 0);
-        player.SetActive(true);
-        PlayerMain.isDead = false;
 
         //플레이어 진행도에 따라 랜덤 리스폰 장소(하드코딩X)로 이동
         //임시로 0 0 0으로 이동하게 해둠
+
+        PlayerMain.isDead = false;
+        player.SetActive(true);
+
+        player.transform.position = tmpSpawnManager.spawnPosition;
 
         //무적?
     }
@@ -97,6 +104,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         CameraRotate();
+        CameraMove();
         Move();
         Jump();
 

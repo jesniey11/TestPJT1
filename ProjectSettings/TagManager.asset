@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerCamera
   - Ground
+  - DeadSpace
   layers:
   - Default
   - TransparentFX
