@@ -66,7 +66,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (!PlayerMain.isJump) {
 				PlayerMain.isJump = true;
-				rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
+                rigid.AddForce(Vector3.up * jumpPower, ForceMode.Impulse);
             }
             else { return; }
         }
@@ -75,6 +75,7 @@ public class PlayerController : MonoBehaviour
     private void Dead() {
         player.SetActive(false);
         PlayerMain.isDead = true;
+        animator.SetBool("isDead", PlayerMain.isDead);
 
         // 5초뒤 부활 - 버튼 눌러야 부활하게 바꿀까?
         Invoke("Respawn", 3);
