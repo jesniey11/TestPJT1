@@ -7,19 +7,68 @@ using UnityEngine.UIElements;
 public class PlayerController : MonoBehaviour
 {
     private Animator animator;
-    private Rigidbody rigid;
+    private Rigidbody rigid;    
     private Vector3 moveDir;
 
     [SerializeField]
     private Transform playerBody;
     [SerializeField]
     private GameObject player;
+    [SerializeField]
+	private Transform cameraArm;
+    [SerializeField]
+    private Transform playerCamera;
 
-    public float playerSpeed = 5.5f;
+	public float playerSpeed = 5.5f;
     public float jumpPower = 7.0f;
+	public float cameraMoveSpeed = 2.0f;
+	public float cameraScrollSpeed = 1000.0f;
 
-    // WASD 이동 (카메라가 보는 방향 기준)
-    private void Move()
+	// 마우스 움직임에 따른 화면 회전
+	private void CameraRotate()
+	{
+
+		Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X") * cameraMoveSpeed, Input.GetAxis("Mouse Y") * cameraMoveSpeed);
+		Vector3 cameraAngle = cameraArm.rotation.eulerAngles; // 카메라의 rotation 값을 오일러 각으로 바꿈
+
+		float x = cameraAngle.x - mouseDelta.y;
+
+		// 카메라 각도 위쪽 40도, 아래쪽 25도 제한 
+		if (x < 180f) { x = Mathf.Clamp(x, -1.0f, 40.0f); }
+		else { x = Mathf.Clamp(x, 335f, 361f); }
+
+		cameraArm.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
+	}
+
+    // 플레이어를 따라가는 CameraArm
+    private void CameraMove() 
+    {
+       Vector3 cameraArmPos = player.transform.position;
+       cameraArm.position = cameraArmPos;
+    }
+
+    // 
+    private void CameraZoom()
+	{
+		float scrollWheel = Input.GetAxis("Mouse ScrollWheel");
+		if (scrollWheel != 0) {
+			Vector3 cameraDir = playerCamera.rotation * Vector3.forward;
+			playerCamera.transform.position += cameraDir * Time.deltaTime * scrollWheel * cameraScrollSpeed;
+		}
+		
+		//Vector3 cameraPos = playerCamera.transform.position;
+		//cameraPos.z += Time.deltaTime * scrollWheel * cameraScrollSpeed;
+
+		//Debug.Log(scrollWheel);
+		
+        // 무조건 z축 이동 - 스크롤 amount * deltaTime * 
+	}
+
+
+
+
+	// WASD 이동 (카메라가 보는 방향 기준)
+	private void PlayerMove()
     {
         if (!PlayerMain.isDead) {
             Vector2 moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -38,7 +87,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Jump()
+    private void PlayerJump()
     {
         if (Input.GetKeyDown(KeyCode.Space)) {
             if (!PlayerMain.isJump) {
@@ -49,7 +98,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void Dead() {
+    private void Dead() 
+    {
         player.SetActive(false);
         PlayerMain.isDead = true;
         animator.SetBool("isDead", PlayerMain.isDead);
@@ -58,7 +108,8 @@ public class PlayerController : MonoBehaviour
         Invoke("Respawn", 3);
     }
 
-    private void Respawn() {
+    private void Respawn() 
+    {
 
         //플레이어 진행도에 따라 랜덤 리스폰 장소(하드코딩X)로 이동
         //임시로 0 0 0으로 이동하게 해둠
@@ -83,8 +134,9 @@ public class PlayerController : MonoBehaviour
     {
         CameraRotate();
         CameraMove();
-        Move();
-        Jump();
+        CameraZoom();
+		PlayerMove();
+		PlayerJump();
 
         if(PlayerMain.isDead) { Dead(); }
     }
