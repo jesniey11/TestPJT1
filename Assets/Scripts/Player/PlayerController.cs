@@ -11,35 +11,12 @@ public class PlayerController : MonoBehaviour
     private Vector3 moveDir;
 
     [SerializeField]
-    private Transform cameraArm;
-    [SerializeField]
     private Transform playerBody;
     [SerializeField]
     private GameObject player;
 
-    public float cameraSpeed = 2.0f;
     public float playerSpeed = 5.5f;
-    public float jumpPower = 10.0f;
-
-    // 마우스 움직임에 따른 화면 회전
-    private void CameraRotate() {
-
-        Vector2 mouseDelta = new Vector2(Input.GetAxis("Mouse X") * cameraSpeed, Input.GetAxis("Mouse Y") * cameraSpeed);
-        Vector3 cameraAngle = cameraArm.rotation.eulerAngles; // 카메라의 rotation 값을 오일러 각으로 바꿈
-
-        float x = cameraAngle.x - mouseDelta.y;
-
-        // 카메라 각도 위쪽 70도, 아래쪽 25도 제한 - 위쪽 각도 제한 더 필요할듯?
-        if (x < 180f) { x = Mathf.Clamp(x, -1.0f, 70.0f); }
-        else { x = Mathf.Clamp(x, 335f, 361f); }
-
-        cameraArm.rotation = Quaternion.Euler(x, cameraAngle.y + mouseDelta.x, cameraAngle.z);
-    }
-
-    private void CameraMove() {
-        Vector3 cameraPos = playerBody.position;
-        cameraArm.position = cameraPos;
-    }
+    public float jumpPower = 7.0f;
 
     // WASD 이동 (카메라가 보는 방향 기준)
     private void Move()
