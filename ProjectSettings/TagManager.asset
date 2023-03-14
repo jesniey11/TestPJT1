@@ -7,6 +7,7 @@ TagManager:
   - PlayerCamera
   - Ground
   - DeadSpace
+  - Enemy
   layers:
   - Default
   - TransparentFX

@@ -15,6 +15,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private GameObject player;
     [SerializeField]
+    private GameObject cookie;
+
+
+    [SerializeField]
 	private Transform cameraArm;
     [SerializeField]
     private Transform playerCamera;
@@ -55,13 +59,6 @@ public class PlayerController : MonoBehaviour
 			Vector3 cameraDir = playerCamera.rotation * Vector3.forward;
 			playerCamera.transform.position += cameraDir * Time.deltaTime * scrollWheel * cameraScrollSpeed;
 		}
-		
-		//Vector3 cameraPos = playerCamera.transform.position;
-		//cameraPos.z += Time.deltaTime * scrollWheel * cameraScrollSpeed;
-
-		//Debug.Log(scrollWheel);
-		
-        // 무조건 z축 이동 - 스크롤 amount * deltaTime * 
 	}
 
 
@@ -101,25 +98,23 @@ public class PlayerController : MonoBehaviour
     private void Dead() 
     {
         player.SetActive(false);
-        PlayerMain.isDead = true;
         animator.SetBool("isDead", PlayerMain.isDead);
 
-        // 5초뒤 부활 - 버튼 눌러야 부활하게 바꿀까?
-        Invoke("Respawn", 3);
+        Invoke("TmpRespawn", 3);
     }
 
-    private void Respawn() 
+    // 테스트를 위한 리스폰
+    private void TmpRespawn() 
     {
 
         //플레이어 진행도에 따라 랜덤 리스폰 장소(하드코딩X)로 이동
         //임시로 0 0 0으로 이동하게 해둠
 
         PlayerMain.isDead = false;
+        Debug.Log("isDead : " + PlayerMain.isDead);
         player.SetActive(true);
 
         player.transform.position = tmpSpawnManager.spawnPosition;
-
-        //무적?
     }
 
     // Start is called before the first frame update
